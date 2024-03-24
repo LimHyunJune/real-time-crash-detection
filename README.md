@@ -7,6 +7,7 @@ Link : https://play.google.com/store/apps/details?id=com.kelvin.sensorapp&hl=ko
 
 # Architecture   
 ![image](https://github.com/LimHyunJune/sensor-real-time-data-pipeline/assets/48524793/4c7c2086-c22c-499e-8894-112efef8dbaa)
-- Confluent Kafka Community
+- Kafka Cluster : Confluent Kafka Community (7.x.x)
+- Kafka Client : kafka (3.7.0)
 - SpringBoot
-- Sensor Loggger
+- Sensor Loggger App
