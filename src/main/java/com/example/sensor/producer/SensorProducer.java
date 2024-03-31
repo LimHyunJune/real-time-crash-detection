@@ -1,4 +1,4 @@
-package com.example.producer;
+package com.example.sensor.producer;
 
 
 import org.apache.kafka.clients.producer.ProducerConfig;
