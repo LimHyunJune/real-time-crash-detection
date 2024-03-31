@@ -34,4 +34,4 @@ Link : https://play.google.com/store/apps/details?id=com.kelvin.sensorapp&hl=ko
     
 **Other tasks**
 - Install ssh-server for ssh connection
-- In the broker server settings file specify a fixed IP for advertised.listeners
+- In the broker server settings file, specify a fixed IP for advertised.listeners
