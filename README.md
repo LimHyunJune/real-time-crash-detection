@@ -8,7 +8,7 @@ Using collision detection algorithms based on sensor data  <br/>
 Note : https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002277558
 
 # Architecture   
-<img src="https://github.com/LimHyunJune/sensor-real-time-data-pipeline/assets/48524793/1a45e3c4-ba93-463f-89ba-6cca931c8d31" width="1000" height="500"/>  
+<img src="https://github.com/LimHyunJune/real-time-crash-detection/assets/48524793/e0857653-39e2-4607-bd82-422cbfffd820" width="900" height="500"/>  
 <br/><br/>
 - Kafka Cluster : Confluent Kafka Community (7.x.x) <br/>
 - Kafka Client : Apache kafka (3.7.0) <br/>
