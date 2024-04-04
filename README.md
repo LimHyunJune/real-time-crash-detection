@@ -1,19 +1,19 @@
-# Sensor Real-Time Data Pipeline
-Perform analysis and detection using sensor data   
-Collect multiple indicators using the Sensor Logger app   
+# Real-time Crash Detection 
+Collect multiple indicators using the Sensor Logger app (Acceleration and Gyro sensor data)  
 Link : https://play.google.com/store/apps/details?id=com.kelvin.sensorapp&hl=ko
    
-<img src="https://github.com/LimHyunJune/sensor-real-time-data-pipeline/assets/48524793/41aa91ed-04e4-42c9-bb14-e8b61e016888" width="700" height="500"/>   
-
+<img src="https://github.com/LimHyunJune/sensor-real-time-data-pipeline/assets/48524793/41aa91ed-04e4-42c9-bb14-e8b61e016888" width="900" height="500"/>   
+<br/><br/>
+Using collision detection algorithms based on sensor data  <br/> 
 Note : https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002277558
 
 # Architecture   
-<img src="https://github.com/LimHyunJune/sensor-real-time-data-pipeline/assets/48524793/4c7c2086-c22c-499e-8894-112efef8dbaa" width="800" height="500"/>  
-
-- Kafka Cluster : Confluent Kafka Community (7.x.x)
-- Kafka Client : Apache kafka (3.7.0)
-- SpringBoot
-- Sensor Loggger App  
+<img src="https://github.com/LimHyunJune/sensor-real-time-data-pipeline/assets/48524793/1a45e3c4-ba93-463f-89ba-6cca931c8d31" width="1000" height="500"/>  
+<br/><br/>
+- Kafka Cluster : Confluent Kafka Community (7.x.x) <br/>
+- Kafka Client : Apache kafka (3.7.0) <br/>
+- SpringBoot <br/>
+- Sensor Loggger App   <br/>
 
 # Settings
 - Create Adapter for Host-VM Connection
