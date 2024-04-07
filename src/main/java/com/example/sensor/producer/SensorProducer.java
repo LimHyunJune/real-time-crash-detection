@@ -3,7 +3,6 @@ package com.example.sensor.producer;
 
 import com.example.sensor.model.Gravity;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
-import jakarta.ws.rs.core.GenericType;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
@@ -20,7 +19,7 @@ public class SensorProducer {
     Properties props = new Properties();
     KafkaProducer<String, GenericRecord> producer;
 
-    SensorProducer()
+    public SensorProducer()
     {
         props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.56.101:9092");
         props.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
@@ -33,13 +32,16 @@ public class SensorProducer {
     public void sendGravityData(Gravity gravity)
     {
         Schema.Parser parser = new Schema.Parser();
-        String myAvroSchema = "{\"type\":\"record\"" +
-                ",\"name\":\"Gravity\"" +
-                ",\"fields\":[{\"name\":\"name\",\"type\":\"string\"}," +
-                "{\"name\":\"x\",\"type\":\"float\"}," +
-                "{\"name\":\"y\",\"type\":\"float\"}," +
-                "{\"name\":\"z\",\"type\":\"float\"}" +
-                "]}";
+        String myAvroSchema = "{"
+                + "\"namespace\": \"myrecord\","
+                + " \"name\": \"Gravity\","
+                + " \"type\": \"record\","
+                + " \"fields\": ["
+                + "     {\"name\": \"x\", \"type\": \"float\"},"
+                + "     {\"name\": \"y\",  \"type\": \"float\"},"
+                + "     {\"name\": \"z\", \"type\": \"float\"}"
+                + " ]"
+                + "}";
         Schema schema = parser.parse(myAvroSchema);
 
         GenericRecord avroRecord = new GenericData.Record(schema);
