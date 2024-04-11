@@ -1,8 +1,8 @@
 package com.example.sensor.controller;
 
 import com.example.sensor.dto.Payload;
+import com.example.sensor.dto.RawData;
 import com.example.sensor.dto.SensorData;
-import com.example.sensor.model.Gravity;
 import com.example.sensor.producer.SensorProducer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,17 +28,19 @@ public class ServiceController {
         ObjectMapper objectMapper = new ObjectMapper();
         for(Payload payload : payloads)
         {
-            if(payload.getName().equals("gravity"))
+            if(payload.getName().equals("gyroscope") || payload.getName().equals("accelerometer"))
             {
                 try {
                     String respData = objectMapper.writeValueAsString(payload.getValues());
-                    Gravity gravity = objectMapper.readValue(
-                            respData, Gravity.class);
-                    sensorProducer.sendGravityData(gravity);
+                    RawData raw = objectMapper.readValue(
+                            respData, RawData.class);
+                    raw.setName(payload.getName());
+                    sensorProducer.sendRawData(raw);
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
             }
+
         }
     }
 

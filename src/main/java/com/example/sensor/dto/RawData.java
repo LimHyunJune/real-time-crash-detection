@@ -1,16 +1,18 @@
-package com.example.sensor.model;
+package com.example.sensor.dto;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-public class Gravity {
-    Float z;
-    Float y;
+@NoArgsConstructor
+public class RawData {
+    String name;
     Float x;
+    Float y;
+    Float z;
 }
