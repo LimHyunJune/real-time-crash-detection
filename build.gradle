@@ -38,7 +38,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.json/json
 	implementation group: 'org.json', name: 'json', version: '20240303'
 
-	implementation 'org.apache.kafka:kafka-clients:2.5.0'
+	implementation 'org.apache.kafka:kafka-clients:3.6.0'
 	implementation 'org.slf4j:slf4j-simple:1.7.30'
 	implementation 'io.confluent:kafka-avro-serializer:7.0.1'
 
