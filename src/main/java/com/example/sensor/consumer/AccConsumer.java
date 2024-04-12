@@ -42,9 +42,6 @@ public class AccConsumer {
 
     public ConsumerRecords<String, Float> consume()
     {
-
-
-
         ConsumerRecords<String, Float> records = consumer.poll(Duration.ofMillis(1000));
         consumer.commitAsync();
         return records;
