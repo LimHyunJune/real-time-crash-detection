@@ -17,12 +17,12 @@ import java.util.Properties;
 @Component
 public class SensorProducer {
     Properties props = new Properties();
-    KafkaProducer<String, GenericRecord> producer;
+    KafkaProducer<GenericRecord, GenericRecord> producer;
 
     public SensorProducer()
     {
         props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.56.101:9092");
-        props.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        props.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
         props.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
         props.put("schema.registry.url", "http://192.168.56.101:8081");
         producer = new KafkaProducer<>(props);
@@ -31,9 +31,23 @@ public class SensorProducer {
     public void sendRawData(RawData raw)
     {
         Schema.Parser parser = new Schema.Parser();
-        String myAvroSchema = "{"
+        String myAvroSchemaKey = "{"
                 + "\"namespace\": \"myrecord\","
-                + " \"name\": \"raw\","
+                + " \"name\": \"raw_key\","
+                + " \"type\": \"record\","
+                + " \"fields\": ["
+                + "     {\"name\": \"name\", \"type\": \"string\"}"
+                + " ]"
+                + "}";
+        Schema schemaKey = parser.parse(myAvroSchemaKey);
+
+        GenericRecord avroRecordKey = new GenericData.Record(schemaKey);
+        avroRecordKey.put("name", raw.getName());
+
+
+        String myAvroSchemaValue = "{"
+                + "\"namespace\": \"myrecord\","
+                + " \"name\": \"raw_value\","
                 + " \"type\": \"record\","
                 + " \"fields\": ["
                 + "     {\"name\": \"x\", \"type\": \"float\"},"
@@ -41,14 +55,14 @@ public class SensorProducer {
                 + "     {\"name\": \"z\", \"type\": \"float\"}"
                 + " ]"
                 + "}";
-        Schema schema = parser.parse(myAvroSchema);
+        Schema schemaValue = parser.parse(myAvroSchemaValue);
 
-        GenericRecord avroRecord = new GenericData.Record(schema);
-        avroRecord.put("x", raw.getX());
-        avroRecord.put("y", raw.getY());
-        avroRecord.put("z", raw.getZ());
+        GenericRecord avroRecordValue = new GenericData.Record(schemaValue);
+        avroRecordValue.put("x", raw.getX());
+        avroRecordValue.put("y", raw.getY());
+        avroRecordValue.put("z", raw.getZ());
 
-        ProducerRecord<String, GenericRecord> record = new ProducerRecord<>(raw.getName(), raw.getName(), avroRecord);
+        ProducerRecord<GenericRecord, GenericRecord> record = new ProducerRecord<>(raw.getName(), avroRecordKey, avroRecordValue);
         producer.send(record);
     }
 }
