@@ -19,6 +19,8 @@ Note : https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?s
 
 <img src="https://github.com/LimHyunJune/real-time-crash-detection/assets/48524793/8bbbc8d0-018c-41da-9f28-37c097419dc2" width="900" height="500"/>
 
+# Ksqldb
+![image](https://github.com/LimHyunJune/real-time-crash-detection/assets/48524793/a3250853-494e-40df-9f5c-b7fb5e518cec)
 
 
 # Settings
