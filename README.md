@@ -6,21 +6,17 @@ Link : https://play.google.com/store/apps/details?id=com.kelvin.sensorapp&hl=ko
 <br/><br/>
 Using collision detection algorithms based on sensor data  <br/> 
 Note : https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002277558
-
-# Architecture   
-<img src="https://github.com/LimHyunJune/real-time-crash-detection/assets/48524793/f4e69e57-1299-44c1-895d-c8a459e8becb" width="900" height="500"/>  
-
 <br/><br/>
 - Kafka Cluster : Confluent Kafka Community (7.x.x) <br/>
 - Kafka Client : Apache kafka (3.7.0) <br/>
 - SpringBoot <br/>
 - Sensor Loggger App   <br/>
 
+<br/>
+pptx: <br/>
+https://github.com/LimHyunJune/real-time-crash-detection/files/15430764/default.pptx
 
-<img src="https://github.com/LimHyunJune/real-time-crash-detection/assets/48524793/8bbbc8d0-018c-41da-9f28-37c097419dc2" width="900" height="500"/>
 
-# Ksqldb
-![image](https://github.com/LimHyunJune/real-time-crash-detection/assets/48524793/a3250853-494e-40df-9f5c-b7fb5e518cec)
 
 
 # Settings
