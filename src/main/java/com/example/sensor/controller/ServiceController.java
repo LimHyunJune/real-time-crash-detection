@@ -19,7 +19,6 @@ public class ServiceController {
     @Autowired
     SensorProducer sensorProducer;
 
-    ObjectMapper objectMapper;
 
     @PostMapping("/")
     public void run(@RequestBody SensorData data)
@@ -35,7 +34,10 @@ public class ServiceController {
                     RawData raw = objectMapper.readValue(
                             respData, RawData.class);
                     raw.setName(payload.getName());
-                    sensorProducer.sendRawData(raw);
+                    if(payload.getName().equals("gyroscope"))
+                        sensorProducer.sendGyrData(raw);
+                    if(payload.getName().equals("accelerometer"))
+                        sensorProducer.sendAccData(raw);
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
