@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RawData {
     String name;
-    Float x;
-    Float y;
-    Float z;
+    Double x;
+    Double y;
+    Double z;
 }
