@@ -14,7 +14,8 @@ Note : https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?s
 
 <br/>
 pptx: <br/>
-https://github.com/LimHyunJune/real-time-crash-detection/files/15430764/default.pptx
+https://github.com/LimHyunJune/real-time-crash-detection/files/15441086/default.pptx
+
 
 
 
