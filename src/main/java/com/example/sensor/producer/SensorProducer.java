@@ -30,8 +30,8 @@ public class SensorProducer {
     int accCount = 0;
     double beforeAccAmount = 0.0;
 
-    final double accThreshold = 0.1;
-    final double gyrThreshold = 0.1;
+    final double accThreshold = 13.0;
+    final double gyrThreshold = 10.0;
 
     public SensorProducer()
     {
@@ -70,6 +70,7 @@ public class SensorProducer {
                         ProducerRecord<Integer, GenericRecord> record = new ProducerRecord<>(raw.getName(),1, avroRecordValue);
                         producer.send(record);
                     }
+                    accCount = 0;
                 }
             }
             else
