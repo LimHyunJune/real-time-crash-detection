@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RawData {
-    String name;
+    String duid;
+    String topic;
     Double x;
     Double y;
     Double z;
