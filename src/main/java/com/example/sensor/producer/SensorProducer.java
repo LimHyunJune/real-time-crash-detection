@@ -11,14 +11,16 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Properties;
 
 @Component
 public class SensorProducer {
     Properties props = new Properties();
-    KafkaProducer<Integer, GenericRecord> producer;
+    KafkaProducer<String, GenericRecord> producer;
 
     GenericRecord avroRecordValue;
 
@@ -27,16 +29,20 @@ public class SensorProducer {
     * 1. The current acceleration value is measured eight times in a row with a sharp change from the previous acceleration value
     * 2. Measurement of the highest acceleration value above the accident determination threshold and the angular velocity value above the appropriate range
     * */
-    int accCount = 0;
-    double beforeAccAmount = 0.0;
 
-    final double accThreshold = 13.0;
-    final double gyrThreshold = 10.0;
+    HashMap<String, Integer> accCountMap;
+
+    HashMap<String, Double> beforeAccAmountMap;
+
+    @Value("${acc.threshold}")
+    double accThreshold;
+    @Value("${gyr.threshold}")
+    double gyrThreshold;
 
     public SensorProducer()
     {
         props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.56.101:9092");
-        props.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class.getName());
+        props.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
         props.put("schema.registry.url", "http://192.168.56.101:8081");
         producer = new KafkaProducer<>(props);
@@ -52,10 +58,16 @@ public class SensorProducer {
                 + "}";
         Schema schemaValue = parser.parse(myAvroSchemaValue);
         avroRecordValue = new GenericData.Record(schemaValue);
+
+        accCountMap = new HashMap<>();
+        beforeAccAmountMap = new HashMap<>();
+
     }
 
     public void sendAccData(RawData raw)
     {
+        int accCount = getAccCount(raw.getDuid());
+        double beforeAccAmount = getBeforeAccAmount(raw.getDuid());
         double currentAccAmount = getAmount(raw);
         if(accCount < 8)
         {
@@ -67,7 +79,7 @@ public class SensorProducer {
                     if(currentAccAmount >= accThreshold)
                     {
                         avroRecordValue.put("amount", currentAccAmount);
-                        ProducerRecord<Integer, GenericRecord> record = new ProducerRecord<>(raw.getName(),1, avroRecordValue);
+                        ProducerRecord<String, GenericRecord> record = new ProducerRecord<>(raw.getTopic(),raw.getDuid(), avroRecordValue);
                         producer.send(record);
                     }
                     accCount = 0;
@@ -81,6 +93,28 @@ public class SensorProducer {
         }
         beforeAccAmount = currentAccAmount;
 
+        setAccCount(raw.getDuid(), accCount);
+        setBeforeAccAmount(raw.getDuid(),beforeAccAmount);
+    }
+
+    private void setAccCount(String duid, int accCount) {
+        accCountMap.put(duid,accCount);
+    }
+
+    private void setBeforeAccAmount(String duid, double beforeAccAmount) {
+        beforeAccAmountMap.put(duid, beforeAccAmount);
+    }
+
+    private double getBeforeAccAmount(String duid) {
+        if(!beforeAccAmountMap.containsKey(duid))
+            beforeAccAmountMap.put(duid, 0.0);
+        return beforeAccAmountMap.get(duid);
+    }
+
+    private int getAccCount(String duid) {
+        if(!accCountMap.containsKey(duid))
+            accCountMap.put(duid, 0);
+        return accCountMap.get(duid);
     }
 
     public void sendGyrData(RawData raw)
@@ -89,7 +123,7 @@ public class SensorProducer {
         if(currentGyrAmount >= gyrThreshold)
         {
             avroRecordValue.put("amount", currentGyrAmount);
-            ProducerRecord<Integer, GenericRecord> record = new ProducerRecord<>(raw.getName(), 1,  avroRecordValue);
+            ProducerRecord<String, GenericRecord> record = new ProducerRecord<>(raw.getTopic(), raw.getDuid(),  avroRecordValue);
             producer.send(record);
         }
     }
