@@ -33,7 +33,8 @@ public class ServiceController {
                     String respData = objectMapper.writeValueAsString(payload.getValues());
                     RawData raw = objectMapper.readValue(
                             respData, RawData.class);
-                    raw.setName(payload.getName());
+                    raw.setTopic(payload.getName());
+                    raw.setDuid(data.getDeviceId());
                     if(payload.getName().equals("gyroscope"))
                         sensorProducer.sendGyrData(raw);
                     if(payload.getName().equals("accelerometer"))
