@@ -14,5 +14,4 @@ public class SensorData {
     String sessionId;
     String deviceId;
     List<Payload> payload;
-
 }
