@@ -30,9 +30,7 @@ public class SensorProducer {
     * 2. Measurement of the highest acceleration value above the accident determination threshold and the angular velocity value above the appropriate range
     * */
 
-    HashMap<String, Integer> accCountMap;
 
-    HashMap<String, Double> beforeAccAmountMap;
 
     @Value("${acc.threshold}")
     double accThreshold;
@@ -59,73 +57,23 @@ public class SensorProducer {
         Schema schemaValue = parser.parse(myAvroSchemaValue);
         avroRecordValue = new GenericData.Record(schemaValue);
 
-        accCountMap = new HashMap<>();
-        beforeAccAmountMap = new HashMap<>();
-
     }
 
     public void sendAccData(RawData raw)
     {
-        int accCount = getAccCount(raw.getDuid());
-        double beforeAccAmount = getBeforeAccAmount(raw.getDuid());
         double currentAccAmount = getAmount(raw);
-        if(accCount < 8)
-        {
-            if(currentAccAmount > beforeAccAmount)
-            {
-                accCount++;
-                if(accCount >= 8 )
-                {
-                    if(currentAccAmount >= accThreshold)
-                    {
-                        avroRecordValue.put("amount", currentAccAmount);
-                        ProducerRecord<String, GenericRecord> record = new ProducerRecord<>(raw.getTopic(),raw.getDuid(), avroRecordValue);
-                        producer.send(record);
-                    }
-                    accCount = 0;
-                }
-            }
-            else
-            {
-                accCount = 0;
-            }
 
-        }
-        beforeAccAmount = currentAccAmount;
-
-        setAccCount(raw.getDuid(), accCount);
-        setBeforeAccAmount(raw.getDuid(),beforeAccAmount);
+        avroRecordValue.put("amount", currentAccAmount);
+        ProducerRecord<String, GenericRecord> record = new ProducerRecord<>(raw.getTopic(),raw.getDuid(), avroRecordValue);
+        producer.send(record);
     }
-
-    private void setAccCount(String duid, int accCount) {
-        accCountMap.put(duid,accCount);
-    }
-
-    private void setBeforeAccAmount(String duid, double beforeAccAmount) {
-        beforeAccAmountMap.put(duid, beforeAccAmount);
-    }
-
-    private double getBeforeAccAmount(String duid) {
-        if(!beforeAccAmountMap.containsKey(duid))
-            beforeAccAmountMap.put(duid, 0.0);
-        return beforeAccAmountMap.get(duid);
-    }
-
-    private int getAccCount(String duid) {
-        if(!accCountMap.containsKey(duid))
-            accCountMap.put(duid, 0);
-        return accCountMap.get(duid);
-    }
-
+    
     public void sendGyrData(RawData raw)
     {
         double currentGyrAmount = getAmount(raw);
-        if(currentGyrAmount >= gyrThreshold)
-        {
-            avroRecordValue.put("amount", currentGyrAmount);
-            ProducerRecord<String, GenericRecord> record = new ProducerRecord<>(raw.getTopic(), raw.getDuid(),  avroRecordValue);
-            producer.send(record);
-        }
+        avroRecordValue.put("amount", currentGyrAmount);
+        ProducerRecord<String, GenericRecord> record = new ProducerRecord<>(raw.getTopic(), raw.getDuid(),  avroRecordValue);
+        producer.send(record);
     }
 
     private Double getAmount(RawData raw)
