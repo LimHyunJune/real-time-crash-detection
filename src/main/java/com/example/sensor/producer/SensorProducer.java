@@ -3,6 +3,7 @@ package com.example.sensor.producer;
 
 import com.example.sensor.dto.RawData;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
+import jakarta.annotation.PostConstruct;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
@@ -30,8 +31,6 @@ public class SensorProducer {
     * 2. Measurement of the highest acceleration value above the accident determination threshold and the angular velocity value above the appropriate range
     * */
 
-
-
     @Value("${acc.threshold}")
     double accThreshold;
     @Value("${gyr.threshold}")
@@ -42,7 +41,10 @@ public class SensorProducer {
     String schemaRegistry;
 
 
-    public SensorProducer()
+    public SensorProducer() {}
+
+    @PostConstruct
+    public void init()
     {
         props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
         props.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
@@ -61,7 +63,6 @@ public class SensorProducer {
                 + "}";
         Schema schemaValue = parser.parse(myAvroSchemaValue);
         avroRecordValue = new GenericData.Record(schemaValue);
-
     }
 
     public void sendAccData(RawData raw)
