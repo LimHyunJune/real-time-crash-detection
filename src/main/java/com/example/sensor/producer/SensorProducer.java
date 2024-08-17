@@ -36,13 +36,18 @@ public class SensorProducer {
     double accThreshold;
     @Value("${gyr.threshold}")
     double gyrThreshold;
+    @Value("${bootstrap.server}")
+    String bootstrapServer;
+    @Value("${schema.registry}")
+    String schemaRegistry;
+
 
     public SensorProducer()
     {
-        props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.56.101:9092");
+        props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
         props.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
-        props.put("schema.registry.url", "http://192.168.56.101:8081");
+        props.put("schema.registry.url", schemaRegistry);
         producer = new KafkaProducer<>(props);
 
         Schema.Parser parser = new Schema.Parser();
